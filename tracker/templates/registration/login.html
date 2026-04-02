@@ -1,0 +1,120 @@
+<div class="auth-wrapper">
+    <div class="card auth-card">
+        <div class="auth-header">
+            <h2>Connexion 🔑</h2>
+            <p>Heureux de vous revoir sur NutriTrack</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="error-banner">
+                    Nom d'utilisateur ou mot de passe incorrect.
+                </div>
+            {% endif %}
+
+            <div class="form-content">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="btn btn-meal btn-block">Se connecter</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+        </div>
+    </div>
+</div>
+<style>
+    /* On utilise les mêmes bases que pour l'inscription */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+    background-color: #f4f7f6;
+}
+
+.auth-card {
+    max-width: 400px;
+    width: 100%;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    color: #2e7d32; /* Ton vert primary */
+    margin-bottom: 8px;
+}
+
+.form-content p {
+    margin-bottom: 1.2rem;
+}
+
+.form-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-content input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #edf2f7;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.form-content input:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.3s;
+}
+
+.btn-block:active {
+    transform: scale(0.98);
+}
+
+.error-banner {
+    background-color: #ffebee;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #d32f2f;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>

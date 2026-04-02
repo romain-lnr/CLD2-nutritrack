@@ -1,0 +1,134 @@
+<div class="auth-wrapper">
+    <div class="card auth-card">
+        <div class="auth-header">
+            <h2>Inscription 📝</h2>
+            <p>Rejoignez NutriTrack pour suivre vos objectifs</p>
+        </div>
+
+        <form method="post" action="{% url 'register' %}" class="auth-form">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="error-banner">
+                    Veuillez corriger les erreurs ci-dessous.
+                </div>
+            {% endif %}
+
+            <div class="form-content">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="btn btn-meal btn-block">Créer mon compte</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Déjà inscrit ? <a href="{% url 'login' %}">Se connecter</a></p>
+        </div>
+    </div>
+</div>
+<style>
+    /* Conteneur principal pour centrer la carte */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    padding: 20px;
+}
+
+.auth-card {
+    max-width: 450px;
+    width: 100%;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    color: #2d3436;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #636e72;
+    font-size: 0.95rem;
+}
+
+/* Stylisation du formulaire Django */
+.form-content p {
+    margin-bottom: 1.2rem;
+}
+
+.form-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2d3436;
+    font-size: 0.9rem;
+}
+
+.form-content input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #edf2f7;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Évite que l'input dépasse de la carte */
+}
+
+.form-content input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* Bouton pleine largeur */
+.btn-block {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Alertes d'erreurs */
+.error-banner {
+    background-color: #fff5f5;
+    color: #c53030;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #c53030;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.errorlist {
+    color: #c53030;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #edf2f7;
+}
+
+.auth-footer a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>

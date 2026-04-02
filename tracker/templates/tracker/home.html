@@ -1,0 +1,116 @@
+<div class="auth-container">
+    <div class="card auth-card">
+        <h2>{% if 'login' in request.path %}Connexion{% else %}Inscription{% endif %}</h2>
+        <p class="auth-subtitle">NutriTrack - Votre compagnon santé</p>
+        
+        <form method="get" action="{% url 'register' %}" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Créer mon compte</button>
+        </form>
+        
+        <div class="auth-footer">
+            {% if 'login' in request.path %}
+                Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a>
+            {% else %}
+                Déjà inscrit ? <a href="{% url 'login' %}">Se connecter</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<style>
+    :root {
+    --primary: #4CAF50;
+    --primary-dark: #388E3C;
+    --bg-light: #f4f7f6;
+    --text-muted: #666;
+}
+
+/* Centrage vertical et horizontal */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: var(--bg-light);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    background: white;
+}
+
+h2 {
+    margin-bottom: 0.5rem;
+    color: #333;
+    text-align: center;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+/* Stylisation des champs Django (form.as_p) */
+.auth-form p {
+    margin-bottom: 1.2rem;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Important pour que le padding ne dépasse pas */
+    transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.btn-primary {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>

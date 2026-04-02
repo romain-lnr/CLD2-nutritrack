@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Noter mon poids - NutriTrack</title>
+    <style>
+        :root { 
+            --secondary: #1565c0; 
+            --bg: #f4f7f6; 
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        
+        h2 { color: var(--secondary); text-align: center; margin-bottom: 25px; }
+        
+        form p { margin-bottom: 15px; }
+        
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+        
+        input:focus { border-color: var(--secondary); outline: none; }
+        
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: var(--secondary); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+        
+        .btn:hover { background: #0d47a1; }
+        
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 14px; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>⚖️ Suivi du poids</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        
+        <button type="submit" class="btn">Enregistrer la pesée</button>
+    </form>
+    
+    <a href="{% url 'dashboard' %}" class="back-link">⬅️ Retour au tableau de bord</a>
+</div>
+
+</body>
+</html>

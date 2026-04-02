@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriTrack - Mon Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { 
+            --primary: #2e7d32; 
+            --secondary: #1565c0; 
+            --danger: #d32f2f;
+            --bg: #f4f7f6; 
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; transition: width 0.5s ease; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .stat-item { text-align: center; border-left: 3px solid var(--primary); padding-left: 10px; }
+        
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; }
+        .btn-meal { background: var(--primary); }
+        .btn-weight { background: var(--secondary); }
+        .btn-settings { background: #607d8b; float: right; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
+        
+        .text-danger { color: var(--danger); font-weight: bold; }
+        .text-success { color: var(--primary); font-weight: bold; }
+        .clearfix::after { content: ""; clear: both; display: table; }
+        .food-img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-right: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card" style="padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; color: var(--primary);">NutriTrack Pro</span>
+        
+        <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: var(--danger); cursor: pointer; font-weight: bold; font-family: inherit;">
+                Se déconnecter 🚪
+            </button>
+        </form>
+    </div>
+    <h1>Bonjour, {{ user.username }} 👋</h1>
+
+    <div class="card">
+        <div class="clearfix">
+            <a href="{% url 'update_goals' %}" class="btn btn-settings">⚙️ Régler mes objectifs</a>
+            <h3>
+                Objectif du jour : 
+                {% if totals.kcal >= target %}
+                    <span class="text-success">{{ target }} / {{ target }} kcal atteint !</span>
+                {% else %}
+                    {{ totals.kcal|default:0 }} / {{ target }} kcal
+                {% endif %}
+            </h3>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" 
+                 style="width: {{ progress }}%; background-color: var(--primary);">
+            </div>
+        </div>
+
+        <p>
+            {% if remaining <= 0 %}
+                <span class="text-success">✅ Objectif de calories rempli !</span>
+            {% else %}
+                Il vous reste <strong>{{ remaining }} kcal</strong> pour atteindre votre objectif.
+            {% endif %}
+        </p>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                🥩 <strong>{{ totals.p|default:0 }} / {{ profile.target_proteins|default:0 }}g</strong><br>Protéines
+            </div>
+            <div class="stat-item" style="border-color: #fbc02d;">
+                🍞 <strong>{{ totals.c|default:0 }} / {{ profile.target_lipides|default:0 }}g</strong><br>Glucides
+            </div>
+            <div class="stat-item" style="border-color: #d32f2f;">
+                🥑 <strong>{{ totals.f|default:0 }} / {{ profile.target_glucides|default:0 }}g</strong><br>Lipides
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Évolution du poids (kg)</h3>
+        <canvas id="weightChart" height="100"></canvas>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'add_meal' %}" class="btn btn-meal">➕ Ajouter un repas</a>
+        <a href="{% url 'add_weight' %}" class="btn btn-weight">⚖️ Noter mon poids</a>
+    </div>
+
+    <div class="card">
+        <h3>Journal d'aujourd'hui</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Repas</th>
+                    <th>Aliment</th>
+                    <th>Quantité</th>
+                    <th>Calories</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.get_meal_type_display }}</td>
+                    <td>
+                        {% if entry.food_item and entry.food_item.image %}
+                            <img src="{{ entry.food_item.image.url }}" alt="{{ entry.food_item.name }}" class="food-img">
+                        {% else %}
+                            <span class="food-img" style="display:inline-block; line-height:40px; text-align:center; background:#eee;">🍲</span>
+                        {% endif %}
+                        
+                        <strong>{{ entry.food_item.name|default:entry.custom_name }}</strong>
+                    </td>
+                    <td>{{ entry.quantity }}g</td>
+                    <td>{{ entry.total_kcal }} kcal</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Aucun aliment enregistré aujourd'hui.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ weight_labels|safe }},
+            datasets: [{
+                label: 'Poids (kg)',
+                data: {{ weight_values|safe }},
+                borderColor: '#1565c0',
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(21, 101, 192, 0.1)'
+            }]
+        },
+        options: { 
+            responsive: true,
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

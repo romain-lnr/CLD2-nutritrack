@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier mes objectifs - NutriTrack</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 12px; max-width: 400px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: #2e7d32; margin-top: 0; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn { background: #2e7d32; color: white; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .back-link { display: block; margin-top: 15px; text-align: center; color: #666; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🎯 Mes Objectifs</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Enregistrer les objectifs</button>
+        </form>
+        <a href="{% url 'dashboard' %}" class="back-link">⬅️ Retour au dashboard</a>
+    </div>
+</body>
+</html>
